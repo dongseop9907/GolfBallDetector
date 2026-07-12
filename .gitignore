@@ -1,7 +1,30 @@
-runs.zip
-runs/
+# Python
 __pycache__/
 *.pyc
-.env
+*.pyo
+*.pyd
+
+# Virtual environment
 venv/
 .venv/
+
+# Environment variables
+.env
+.env.*
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# YOLO training results
+runs/
+runs.zip
+*.pt
+
+# Dataset
+datasets/
+
+# Operating system
+.DS_Store
+Thumbs.db
