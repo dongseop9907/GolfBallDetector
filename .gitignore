@@ -1,0 +1,7 @@
+runs.zip
+runs/
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
