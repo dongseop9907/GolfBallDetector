@@ -187,6 +187,24 @@ yolo predict model=weights/best.pt source=sample.mp4
 
 ---
 
+## 📊 Model Performance
+
+### Training Results
+
+<p align="center">
+  <img src="./assets/results.png" width="850"/>
+</p>
+
+### Precision-Recall Curve
+
+<p align="center">
+  <img src="./assets/PR_curve.png" width="700"/>
+</p>
+
+전체 클래스 기준 `mAP@0.5`는 약 `0.865`로 측정되었습니다.
+
+---
+
 ## 📊 Model Evaluation
 
 모델 성능은 다음 지표를 기준으로 평가합니다.
