@@ -1,25 +1,110 @@
-import torch  # torch 모듈을 임포트
+"""Train a YOLO model for golf-ball detection."""
 
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+import torch
 from ultralytics import YOLO
 
-# GPU 설정 확인 (CUDA가 설치되어 있으면 GPU 사용)
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-# YOLO 모델 로드 (모델 크기는 'yolov8m.yaml'을 사용)
-model = YOLO('yolov8m.yaml')
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
 
-# 모델 학습
-model.train(
-    data='C:/Users/user/Desktop/yolo/data.yaml',  # 데이터 경로
-    workers=8,  # 데이터 로더의 워커 수 (CPU 코어 수에 맞게 조정)
-    imgsz=640,  # 이미지 크기
-    epochs=3,  # 학습 에포크 수
-    lr0=0.01,  # 초기 학습률
-    batch=16,  # 배치 크기 (GPU 메모리에 맞게 설정)
-    device=device,  # GPU 사용 (CUDA)
-    augment=True,  # 데이터 증강 사용
-    multi_scale=True,  # 다양한 크기의 이미지를 사용하여 학습
-)
+    parser = argparse.ArgumentParser(
+        description="Train a YOLO model on a custom golf-ball dataset."
+    )
 
-# 학습이 완료된 후 모델을 저장
-model.save('yolov8.pt')
+    parser.add_argument(
+        "--data",
+        type=Path,
+        default=Path("data.yaml"),
+        help="Path to the dataset YAML file. Default: data.yaml",
+    )
+
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="yolov8m.pt",
+        help="Initial YOLO model or weight file. Default: yolov8m.pt",
+    )
+
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=100,
+        help="Number of training epochs. Default: 100",
+    )
+
+    parser.add_argument(
+        "--imgsz",
+        type=int,
+        default=640,
+        help="Training image size. Default: 640",
+    )
+
+    parser.add_argument(
+        "--batch",
+        type=int,
+        default=16,
+        help="Training batch size. Default: 16",
+    )
+
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=8,
+        help="Number of data-loading workers. Default: 8",
+    )
+
+    parser.add_argument(
+        "--project",
+        type=Path,
+        default=Path("runs/detect"),
+        help="Directory in which training results are saved.",
+    )
+
+    parser.add_argument(
+        "--name",
+        type=str,
+        default="golf-ball",
+        help="Name of the training run. Default: golf-ball",
+    )
+
+    return parser.parse_args()
+
+
+def main() -> None:
+    """Load the model and start training."""
+
+    args = parse_args()
+
+    if not args.data.exists():
+        raise FileNotFoundError(
+            f"Dataset configuration file was not found: {args.data.resolve()}"
+        )
+
+    device = 0 if torch.cuda.is_available() else "cpu"
+
+    print(f"Dataset: {args.data.resolve()}")
+    print(f"Model: {args.model}")
+    print(f"Device: {'CUDA GPU' if device == 0 else 'CPU'}")
+
+    model = YOLO(args.model)
+
+    model.train(
+        data=str(args.data),
+        epochs=args.epochs,
+        imgsz=args.imgsz,
+        batch=args.batch,
+        workers=args.workers,
+        device=device,
+        project=str(args.project),
+        name=args.name,
+        augment=True,
+    )
+
+
+if __name__ == "__main__":
+    main()
