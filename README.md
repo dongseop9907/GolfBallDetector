@@ -212,10 +212,14 @@ yolo predict model=weights/best.pt source=sample.mp4
 
 ## 🖼 Detection Results
 
-학습된 모델을 이용한 골프공 탐지 결과 이미지와 영상은  
-추후 README 또는 `results` 폴더에 추가할 예정입니다.
+학습된 YOLO 모델을 이용하여 검증 이미지에서 골프공을 탐지한 결과입니다.
 
-탐지 결과를 추가할 때는 다음과 같은 구조를 사용할 수 있습니다.
+<p align="center">
+  <img src="./assets/detection-result.jpg" width="750"/>
+</p>
+
+모델은 잔디, 실내 및 다중 객체 환경에서 골프공의 위치를  
+바운딩 박스와 Confidence Score로 표시합니다.
 
 ```text
 results/
