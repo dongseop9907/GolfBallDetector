@@ -517,6 +517,49 @@ golfball
 
 ---
 
+## 📦 Model Download
+
+학습된 YOLO 모델은 GitHub Releases에서 내려받을 수 있습니다.
+
+<p>
+  <a href="https://github.com/dongseop9907/GolfBallDetector/releases/latest/download/best.pt">
+    <img src="https://img.shields.io/badge/Download-best.pt-2ea44f?style=for-the-badge&logo=github"/>
+  </a>
+</p>
+
+### 모델 실행
+
+다운로드한 `best.pt` 파일을 프로젝트의 `weights` 폴더에 저장합니다.
+
+```text
+GolfBallDetector/
+└── weights/
+    └── best.pt
+```
+
+이미지 탐지:
+
+```bash
+python predict.py --weights weights/best.pt --source sample.jpg
+```
+
+영상 탐지:
+
+```bash
+python predict.py --weights weights/best.pt --source sample.mp4
+```
+
+웹캠 탐지:
+
+```bash
+python predict.py --weights weights/best.pt --source 0 --show
+```
+
+> 현재 공개된 모델은 초기 통합 데이터셋으로 학습되어 일부 클래스명이  
+> 통일되지 않은 한계가 있습니다.
+
+---
+
 ## ⚠️ Model Files
 
 학습된 모델 파일인 `best.pt`와 `last.pt`는 용량이 크기 때문에  
