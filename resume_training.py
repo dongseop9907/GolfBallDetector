@@ -1,4 +1,4 @@
-"""Resume an interrupted YOLO training run from a last.pt checkpoint."""
+"""Resume an interrupted YOLO training run."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        description="Resume YOLO training from an existing last.pt checkpoint."
+        description="Resume YOLO training from a last.pt checkpoint."
     )
 
     parser.add_argument(
@@ -29,20 +29,24 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    """Load a checkpoint and resume the interrupted training run."""
+    """Load a checkpoint and resume training."""
 
     args = parse_args()
     checkpoint = args.checkpoint.expanduser().resolve()
 
     if not checkpoint.is_file():
         raise FileNotFoundError(
-            "Training checkpoint was not found.\n"
+            "Checkpoint file was not found.\n"
             f"Checked path: {checkpoint}\n"
             "Use --checkpoint to provide the correct last.pt path."
         )
 
-    print(f"Checkpoint: {checkpoint}")
-    print("Resuming training...")
+    if checkpoint.suffix.lower() != ".pt":
+        raise ValueError(
+            f"Checkpoint must be a .pt file: {checkpoint}"
+        )
+
+    print(f"Resuming training from: {checkpoint}")
 
     model = YOLO(str(checkpoint))
     model.train(resume=True)
